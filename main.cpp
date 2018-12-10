@@ -5,16 +5,18 @@
 #include "Snake.h"
 
 // Variables used in the program
-float speed = 0.05f;
+float speed = 1.f;
 float size  = 25.f;
 float startingX = 100.f;
 float startingY = 100.f;
 sf::Color color = sf::Color::Green;
+float fps = 60.f;
 
 int main()
 {
     sf::Uint32 style = sf::Style::Titlebar | sf::Style::Close | sf::Style::Resize;
     sf::RenderWindow window(sf::VideoMode(1280, 720), "Snake", style);
+    window.setFramerateLimit(fps);
 
     Snake snake(size, speed, color, startingX, startingY);
     std::list<sf::RectangleShape> c = snake.getBody();
@@ -30,23 +32,29 @@ int main()
                 case e.Closed:
                     window.close();
                     break;
+                case e.TextEntered:
+                    if (e.text.unicode == 'p')
+                        std::cout << snake.getBody().size() << std::endl;
+                    if (e.text.unicode == 'g')
+                        snake.grow();
+                    break;
             }
         }
 
-        /*if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Up)) {
-            player.move(0.f, -speed);
+        if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Up)) {
+            snake.move(0);
         }
         if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Left)) {
-            player.move(-speed, 0.f);
+            snake.move(1);
         }
         if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Down)) {
-            player.move(0.f, speed);
+            snake.move(2);
         }
         if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Right)) {
-            player.move(speed, 0.f);
-        }*
+            snake.move(3);
+        }
 
-        if (sf::Mouse::isButtonPressed(sf::Mouse::Button::Left)) {
+        /*if (sf::Mouse::isButtonPressed(sf::Mouse::Button::Left)) {
             sf::Vector2i pos = sf::Mouse::getPosition(window);
             player.setPosition((float)pos.x, (float)pos.y);
         }*/

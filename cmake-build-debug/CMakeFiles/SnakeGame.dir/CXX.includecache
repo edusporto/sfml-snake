@@ -1,0 +1,24 @@
+#IncludeRegexLine: ^[ 	]*[#%][ 	]*(include|import)[ 	]*[<"]([^">]+)([">])
+
+#IncludeRegexScan: ^.*$
+
+#IncludeRegexComplain: ^$
+
+#IncludeRegexTransform: 
+
+../include/Snake.h
+list
+-
+SFML/Graphics.hpp
+-
+
+/home/eduardo/Desktop/temp/sfml-snake/main.cpp
+iostream
+-
+list
+-
+SFML/Graphics.hpp
+-
+Snake.h
+/home/eduardo/Desktop/temp/sfml-snake/Snake.h
+
