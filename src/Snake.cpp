@@ -2,7 +2,7 @@
 #include "Snake.h"
 #include <iostream>
 
-Snake::Snake(float size, float speed, sf::Color color, float startingX, float startingY)
+Snake::Snake(float size, float speed, int growth, sf::Color color, float startingX, float startingY)
 {
     const sf::Vector2f startingPosition(startingX, startingY);
 
@@ -12,11 +12,12 @@ Snake::Snake(float size, float speed, sf::Color color, float startingX, float st
     head.setOrigin(size / 2, size / 2);
     head.setPosition(startingPosition);
 
-    this->speed = speed;
-    this->size  = size;
-    this->color = color;
+    this->speed  = speed;
+    this->size   = size;
+    this->growth = growth;
+    this->color  = color;
 
-    this->body.push_front(head);
+    this->body.push_back(head);
 }
 
 Snake::~Snake()
@@ -27,36 +28,41 @@ Snake::~Snake()
 void Snake::grow()
 {
     // Grows the snake by 5 pieces
-    for (int i=0; i<5; i++) {
-        sf::RectangleShape newPiece(sf::Vector2f(size,size));
-        newPiece.setPosition(body.back().getPosition().x, body.back().getPosition().x);
+    for (int i=0; i<this->growth; i++)
+    {
+        sf::RectangleShape newPiece(sf::Vector2f(size, size));
+        newPiece.setFillColor(color);
         newPiece.setOrigin(size / 2, size / 2);
-        this->body.push_back(newPiece);
+        newPiece.setPosition(body[body.size()-1].getPosition().x, body[body.size()-1].getPosition().y);
+
+        body.push_back(newPiece);
     }
 }
 
-void Snake::move(char direction)
+void Snake::move(Direction direction)
 {
-    sf::RectangleShape head = body.front();
-    std::cout << head.getPosition().x << " " << head.getPosition().y << std::endl;
+    sf::RectangleShape& head = body.front();
+    for (int i = body.size() - 1; i > 0; i--)
+        body[i] = body[i - 1];
+
     switch (direction)
     {
         case 0:
-            head.move(speed, 0.f);
+            head.move(0.f, -speed);
             break;
         case 1:
-            head.move(0.f, speed);
-            break;
-        case 2:
             head.move(-speed, 0.f);
             break;
+        case 2:
+            head.move(0.f, speed);
+            break;
         case 3:
-            head.move(0.f, -speed);
+            head.move(speed, 0.f);
             break;
     }
 }
 
-std::list<sf::RectangleShape>& Snake::getBody()
+std::vector<sf::RectangleShape>& Snake::getBody()
 {
     return this->body;
 }

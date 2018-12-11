@@ -2,23 +2,28 @@
 #ifndef SNAKEGAME_SNAKE_H
 #define SNAKEGAME_SNAKE_H
 
-#include <list>
+#include <vector>
 #include <SFML/Graphics.hpp>
 
 class Snake {
     protected:
-        std::list<sf::RectangleShape> body;
+        std::vector<sf::RectangleShape> body;
         float size;
         float speed;
+        int growth;
         sf::Color color;
     public:
-        Snake(float=25.f, float=0.05f, sf::Color=sf::Color::Green, float=100.f, float=100.f);
+        Snake(float=25.f, float=0.05f, int=5, sf::Color=sf::Color::Green, float=100.f, float=100.f);
         virtual ~Snake();
-        std::list<sf::RectangleShape>& getBody();
-        float getSize()  { return this->size; };
-        float getSpeed() { return this-> size; };
+        std::vector<sf::RectangleShape>& getBody();
+        float getSize()   { return this->size; };
+        float getSpeed()  { return this->speed; };
+        int   getGrowth() { return this->growth; };
         void grow();
-        void move(char);
+        enum Direction {
+            Up, Left, Down, Right
+        };
+        void move(Direction);
 };
 
 #endif //SNAKEGAME_SNAKE_H

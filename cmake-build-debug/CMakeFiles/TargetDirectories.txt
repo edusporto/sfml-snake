@@ -1,3 +1,0 @@
-/home/eduardo/Desktop/temp/sfml-snake/cmake-build-debug/CMakeFiles/rebuild_cache.dir
-/home/eduardo/Desktop/temp/sfml-snake/cmake-build-debug/CMakeFiles/SnakeGame.dir
-/home/eduardo/Desktop/temp/sfml-snake/cmake-build-debug/CMakeFiles/edit_cache.dir
