@@ -6,24 +6,36 @@
 #include "Food.h"
 
 // Variables used in the program
-float speed = 5.f;
+int windowWidth = 1280;
+int windowHeight = 720;
+float speed = 10.f;
 float size  = 10.f;
 int growth  = 20;
 float startingX = 100.f;
 float startingY = 100.f;
 sf::Color color = sf::Color::Green;
-float fps = 60.f;
+float fps = 30.f;
+
+Snake snake(size, speed, growth, color, startingX, startingY);
+Food food(windowWidth, windowHeight, size, sf::Color::White);
+
+void restart()
+{
+    snake = Snake(size, speed, growth, color, startingX, startingY);
+    food  = Food(windowWidth, windowHeight, size, sf::Color::White);
+}
 
 int main()
 {
     sf::Uint32 style = sf::Style::Titlebar | sf::Style::Close | sf::Style::Resize;
-    sf::RenderWindow window(sf::VideoMode(1280, 720), "Snake", style);
+    sf::RenderWindow window(sf::VideoMode(windowWidth, windowHeight), "Snake", style);
     window.setFramerateLimit(fps);
 
-    Snake snake(size, speed, growth, color, startingX, startingY);
+    //Snake snake(size, speed, growth, color, startingX, startingY);
     Snake::Direction nextMove = Snake::Right;
+    Snake::Direction lastMove = Snake::Right;
 
-    Food food(1280, 720, size, sf::Color::White);
+    //Food food(windowWidth, windowHeight, size, sf::Color::White);
 
     while (window.isOpen())
     {
@@ -42,26 +54,33 @@ int main()
                     if (e.text.unicode == 'g')
                         snake.grow();
                     if (e.text.unicode == 'f')
-                        food = Food(1280, 720, size, sf::Color::White);
+                        food = Food(windowWidth, windowHeight, size, sf::Color::White);
                     break;
             }
         }
 
         if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Up)) {
             //snake.move(0);
-            nextMove = Snake::Up;
+            if (lastMove != Snake::Down)
+                nextMove = Snake::Up;
         }
+
         if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Left)) {
             //snake.move(1);
-            nextMove = Snake::Left;
+            if (lastMove != Snake::Right)
+                nextMove = Snake::Left;
         }
+
         if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Down)) {
             //snake.move(2);
-            nextMove = Snake::Down;
+            if (lastMove != Snake::Up)
+                nextMove = Snake::Down;
         }
+
         if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Right)) {
             //snake.move(3);
-            nextMove = Snake::Right;
+            if (lastMove != Snake::Left)
+                nextMove = Snake::Right;
         }
 
         /*if (sf::Mouse::isButtonPressed(sf::Mouse::Button::Left)) {
@@ -73,11 +92,19 @@ int main()
             window.close();
         }
 
+        window.clear();
+
         // Game loop
         snake.move(nextMove);
+        lastMove = nextMove;
 
+        if (snake.intersectsWithItself())
+            restart();
 
-        window.clear();
+        if (snake.intersects(food.getBody())) {
+            food = Food(windowWidth, windowHeight, size, sf::Color::White);
+            snake.grow();
+        }
 
         // Drawing objects on the screen
         for (sf::RectangleShape piece : snake.getBody()) {

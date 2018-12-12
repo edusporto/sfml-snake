@@ -26,6 +26,8 @@ class Snake {
             Up, Left, Down, Right
         };
         void move(Direction);
+        bool intersects(const sf::RectangleShape&);
+        bool intersectsWithItself();
 };
 
 #endif //SNAKEGAME_SNAKE_H

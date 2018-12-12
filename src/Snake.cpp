@@ -9,7 +9,7 @@ Snake::Snake(float size, float speed, int growth, sf::Color color, float startin
     sf::RectangleShape head(sf::Vector2f(size, size));
 
     head.setFillColor(color);
-    head.setOrigin(size / 2, size / 2);
+    //head.setOrigin(size / 2, size / 2);
     head.setPosition(startingPosition);
 
     this->speed  = speed;
@@ -32,7 +32,7 @@ void Snake::grow()
     {
         sf::RectangleShape newPiece(sf::Vector2f(size, size));
         newPiece.setFillColor(color);
-        newPiece.setOrigin(size / 2, size / 2);
+        //newPiece.setOrigin(size / 2, size / 2);
         newPiece.setPosition(body[body.size()-1].getPosition().x, body[body.size()-1].getPosition().y);
 
         body.push_back(newPiece);
@@ -66,4 +66,31 @@ void Snake::move(Direction direction)
 std::vector<sf::RectangleShape>& Snake::getBody()
 {
     return this->body;
+}
+
+bool Snake::intersects(const sf::RectangleShape& square)
+{
+    sf::Vector2f halfSizeMyHead = body[0].getSize() / 2.f;
+    sf::Vector2f halfSizeSquare = square.getSize()  / 2.f;
+    sf::Vector2f posMyHead = body[0].getPosition() + halfSizeMyHead;
+    sf::Vector2f posSquare = square.getPosition()  + halfSizeSquare;
+
+    sf::Vector2f delta = posMyHead - posSquare;
+    float intersectX = abs(delta.x)  - (halfSizeMyHead.x + halfSizeSquare.x);
+    float intersectY = abs(delta.y)  - (halfSizeMyHead.y + halfSizeSquare.y);
+
+    if (intersectX < 0.f && intersectY < 0.f)
+        return true;
+
+    return false;
+}
+
+bool Snake::intersectsWithItself()
+{
+    // starts at 2 so the head wont collide with the first body part
+    for (int i=3; i<body.size(); i++) {
+        if (intersects(body[i]))
+            return true;
+    }
+    return false;
 }
