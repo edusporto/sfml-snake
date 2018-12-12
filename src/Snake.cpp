@@ -27,7 +27,7 @@ Snake::~Snake()
 
 void Snake::grow()
 {
-    // Grows the snake by 5 pieces
+    // Grows the snake by growth pieces
     for (int i=0; i<this->growth; i++)
     {
         sf::RectangleShape newPiece(sf::Vector2f(size, size));
@@ -42,6 +42,7 @@ void Snake::grow()
 void Snake::move(Direction direction)
 {
     sf::RectangleShape& head = body.front();
+
     for (int i = body.size() - 1; i > 0; i--)
         body[i] = body[i - 1];
 

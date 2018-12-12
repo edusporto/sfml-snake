@@ -7,11 +7,11 @@ set(CMAKE_CXX_STANDARD 11)
 include_directories(include)
 
 # Adds all the source files in the src folder to the project
-file(GLOB SOURCES "src/*.cpp")
-set(MAIN main.cpp include/Snake.h src/Snake.cpp)
+# file(GLOB SOURCES "src/*.cpp")
+set(MAIN main.cpp include/Snake.h src/Snake.cpp src/Food.cpp)
 
 # Creates project executable
-add_executable(SnakeGame ${MAIN} ${SOURCES})
+add_executable(SnakeGame ${MAIN})
 
 
 # Copies the texture files to the build directory

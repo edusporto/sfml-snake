@@ -3,6 +3,7 @@
 #include <vector>
 #include <SFML/Graphics.hpp>
 #include "Snake.h"
+#include "Food.h"
 
 // Variables used in the program
 float speed = 5.f;
@@ -20,9 +21,9 @@ int main()
     window.setFramerateLimit(fps);
 
     Snake snake(size, speed, growth, color, startingX, startingY);
-    std::vector<sf::RectangleShape>& c = snake.getBody();
-
     Snake::Direction nextMove = Snake::Right;
+
+    Food food(1280, 720, size, sf::Color::White);
 
     while (window.isOpen())
     {
@@ -40,6 +41,8 @@ int main()
                         std::cout << snake.getBody().size() << std::endl;
                     if (e.text.unicode == 'g')
                         snake.grow();
+                    if (e.text.unicode == 'f')
+                        food = Food(1280, 720, size, sf::Color::White);
                     break;
             }
         }
@@ -76,9 +79,12 @@ int main()
 
         window.clear();
 
-        for (sf::RectangleShape x : c) {
-            window.draw(x);
+        // Drawing objects on the screen
+        for (sf::RectangleShape piece : snake.getBody()) {
+            window.draw(piece);
         }
+        window.draw(food.getBody());
+
         //window.draw(player);
         window.display();
     }

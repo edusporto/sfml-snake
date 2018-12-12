@@ -19,6 +19,8 @@ class Snake {
         float getSize()   { return this->size; };
         float getSpeed()  { return this->speed; };
         int   getGrowth() { return this->growth; };
+        sf::Color getColor() { return this->color; };
+
         void grow();
         enum Direction {
             Up, Left, Down, Right
