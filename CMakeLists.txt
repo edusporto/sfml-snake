@@ -14,8 +14,8 @@ set(MAIN main.cpp include/Snake.h src/Snake.cpp src/Food.cpp)
 add_executable(SnakeGame ${MAIN})
 
 
-# Copies the texture files to the build directory
-#file(COPY textures DESTINATION ./)
+# Copies the resource files to the build directory
+file(COPY resources DESTINATION ./)
 
 # Detect and add SFML
 set(CMAKE_MODULE_PATH "${CMAKE_SOURCE_DIR}/cmake_modules" ${CMAKE_MODULE_PATH})

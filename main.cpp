@@ -19,11 +19,33 @@ float fps = 30.f;
 Snake snake(size, speed, growth, color, startingX, startingY);
 Food food(windowWidth, windowHeight, size, sf::Color::White);
 
+Snake::Direction nextMove = Snake::Right;
+Snake::Direction lastMove = Snake::Right;
+
+
+// Helper functions
+
 void restart()
 {
     snake = Snake(size, speed, growth, color, startingX, startingY);
     food  = Food(windowWidth, windowHeight, size, sf::Color::White);
 }
+
+void gameLoop()
+{
+	snake.move(nextMove);
+    lastMove = nextMove;
+
+    if (snake.intersectsWithItself())
+        restart();
+
+    if (snake.intersects(food.getBody())) {
+        food = Food(windowWidth, windowHeight, size, sf::Color::White);
+        snake.grow();
+    }
+}
+
+
 
 int main()
 {
@@ -32,10 +54,21 @@ int main()
     window.setFramerateLimit(fps);
 
     //Snake snake(size, speed, growth, color, startingX, startingY);
-    Snake::Direction nextMove = Snake::Right;
-    Snake::Direction lastMove = Snake::Right;
 
     //Food food(windowWidth, windowHeight, size, sf::Color::White);
+
+    bool paused = true;
+
+    sf::Font font;
+    if (!font.loadFromFile("resources/fonts/arial.ttf")) {
+        std::cout << "Could not load resources/fonts/arial.ttf" << std::endl;
+        return 0;
+    }
+    sf::Text pausedText;
+    pausedText.setFont(font);
+    pausedText.setString("Paused. Press [SPACE] to unpause");
+    pausedText.setFillColor(sf::Color::Yellow);
+    pausedText.setCharacterSize(30);
 
     while (window.isOpen())
     {
@@ -55,6 +88,8 @@ int main()
                         snake.grow();
                     if (e.text.unicode == 'f')
                         food = Food(windowWidth, windowHeight, size, sf::Color::White);
+                    if (e.text.unicode == ' ')
+                    	paused = !paused;
                     break;
             }
         }
@@ -95,19 +130,22 @@ int main()
         window.clear();
 
         // Game loop
-        snake.move(nextMove);
-        lastMove = nextMove;
-
-        if (snake.intersectsWithItself())
-            restart();
-
-        if (snake.intersects(food.getBody())) {
-            food = Food(windowWidth, windowHeight, size, sf::Color::White);
-            snake.grow();
+        if (!paused) {
+            gameLoop();
+        }
+        else {
+            window.draw(pausedText);
         }
 
         // Drawing objects on the screen
+		sf::RectangleShape previous;
         for (sf::RectangleShape piece : snake.getBody()) {
+        	// Preventes pieces of the snake that are in the same position be drawn
+        	// Helps in performance of really big snakes
+            if (previous.getPosition() == piece.getPosition())
+           	    break;
+            previous = piece;
+
             window.draw(piece);
         }
         window.draw(food.getBody());
