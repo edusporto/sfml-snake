@@ -2,7 +2,7 @@
 #include "Snake.h"
 #include <iostream>
 
-Snake::Snake(float size, float speed, int growth, sf::Color color, float startingX, float startingY)
+Snake::Snake(int windowWidth, int windowHeight, float size, float speed, int growth, sf::Color color, float startingX, float startingY)
 {
     const sf::Vector2f startingPosition(startingX, startingY);
 
@@ -12,6 +12,8 @@ Snake::Snake(float size, float speed, int growth, sf::Color color, float startin
     //head.setOrigin(size / 2, size / 2);
     head.setPosition(startingPosition);
 
+    this->windowWidth = windowWidth;
+    this->windowHeight = windowHeight;
     this->speed  = speed;
     this->size   = size;
     this->growth = growth;
@@ -61,6 +63,17 @@ void Snake::move(Direction direction)
             head.move(speed, 0.f);
             break;
     }
+
+    if (head.getPosition().x < 0)
+        head.setPosition(windowWidth-size, head.getPosition().y);
+    if (head.getPosition().x >= windowWidth)
+        head.setPosition(0, head.getPosition().y);
+    if (head.getPosition().y < 0)
+        head.setPosition(head.getPosition().x, windowHeight-size);
+    if (head.getPosition().y >= windowHeight)
+        head.setPosition(head.getPosition().x, 0);
+
+    std::cout << head.getPosition().x << '\n';
 }
 
 std::vector<sf::RectangleShape>& Snake::getBody()

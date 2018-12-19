@@ -16,7 +16,7 @@ float startingY = 100.f;
 sf::Color color = sf::Color::Green;
 float fps = 30.f;
 
-Snake snake(size, speed, growth, color, startingX, startingY);
+Snake snake(windowWidth, windowHeight, size, speed, growth, color, startingX, startingY);
 Food food(windowWidth, windowHeight, size, sf::Color::White);
 
 Snake::Direction nextMove = Snake::Right;
@@ -27,7 +27,7 @@ Snake::Direction lastMove = Snake::Right;
 
 void restart()
 {
-    snake = Snake(size, speed, growth, color, startingX, startingY);
+    snake = Snake(windowWidth, windowHeight, size, speed, growth, color, startingX, startingY);
     food  = Food(windowWidth, windowHeight, size, sf::Color::White);
 }
 
