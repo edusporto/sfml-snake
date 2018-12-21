@@ -72,8 +72,6 @@ void Snake::move(Direction direction)
         head.setPosition(head.getPosition().x, windowHeight-size);
     if (head.getPosition().y >= windowHeight)
         head.setPosition(head.getPosition().x, 0);
-
-    std::cout << head.getPosition().x << '\n';
 }
 
 std::vector<sf::RectangleShape>& Snake::getBody()
