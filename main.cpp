@@ -7,7 +7,7 @@
 
 /* ========== Variables used in the program ========== */
 // Window configuration
-float fps = 30.f;
+unsigned int fps = 60;
 int windowWidth = 1280;
 int windowHeight = 720;
 
