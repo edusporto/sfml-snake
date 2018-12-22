@@ -1,0 +1,4 @@
+cmake ..
+make
+./SnakeGame.exe
+

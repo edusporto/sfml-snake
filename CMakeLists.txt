@@ -8,10 +8,10 @@ include_directories(include)
 
 # Adds all the source files in the src folder to the project
 # file(GLOB SOURCES "src/*.cpp")
-set(MAIN main.cpp include/Snake.h src/Snake.cpp src/Food.cpp)
+set(MAIN main.cpp src/Snake.cpp src/Food.cpp)
 
 # Creates project executable
-add_executable(SnakeGame ${MAIN})
+add_executable(SnakeGame.exe ${MAIN})
 
 
 # Copies the resource files to the build directory
@@ -22,5 +22,5 @@ set(CMAKE_MODULE_PATH "${CMAKE_SOURCE_DIR}/cmake_modules" ${CMAKE_MODULE_PATH})
 find_package(SFML 2 REQUIRED system graphics window network audio)
 if(SFML_FOUND)
     include_directories(${SFML_INCLUDE_DIR})
-    target_link_libraries(${PROJECT_NAME} ${SFML_LIBRARIES})
+    target_link_libraries(${PROJECT_NAME}.exe ${SFML_LIBRARIES})
 endif()
