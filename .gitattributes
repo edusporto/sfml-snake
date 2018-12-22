@@ -1,1 +1,2 @@
-cmake_modules/* linguist-vendored
+*.cmake linguist-vendored
+*.sh linguist-vendored
