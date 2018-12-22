@@ -18,9 +18,10 @@ int growth  = 20;
 float startingX = 100.f;
 float startingY = 100.f;
 sf::Color color = sf::Color::Green;
+sf::Color foodColor = sf::Color::White;
 
 Snake snake(windowWidth, windowHeight, size, speed, growth, color, startingX, startingY);
-Food food(windowWidth, windowHeight, size, sf::Color::White);
+Food food(windowWidth, windowHeight, size, foodColor);
 Snake::Direction nextMove = Snake::Right;
 Snake::Direction lastMove = Snake::Right;
 
@@ -43,12 +44,12 @@ void restart()
     lastMove = Snake::Right;
     nextMove = Snake::Right;
     snake = Snake(windowWidth, windowHeight, size, speed, growth, color, startingX, startingY);
-    food  = Food(windowWidth, windowHeight, size, sf::Color::White);
+    food  = Food(windowWidth, windowHeight, size, foodColor);
 }
 
 void gameLoop()
 {
-	snake.move(nextMove);
+    snake.move(nextMove);
     lastMove = nextMove;
 
     // Checking if the snake's head intersects with itself
@@ -59,7 +60,7 @@ void gameLoop()
 
     // Checking if the snake is intersecting a food piece
     if (snake.intersects(food.getBody())) {
-        food = Food(windowWidth, windowHeight, size, sf::Color::White);
+        food = Food(windowWidth, windowHeight, size, foodColor);
         points += 100;
         snake.grow();
     }
@@ -86,6 +87,7 @@ int main()
     sf::Uint32 style = sf::Style::Titlebar | sf::Style::Close | sf::Style::Resize;
     sf::RenderWindow window(sf::VideoMode(windowWidth, windowHeight), "Snake", style);
     window.setFramerateLimit(fps);
+    sf::Color backgroundColor = sf::Color(40,40,40);
 
     // Setting different texts showed on the screen
     sf::Font font;
@@ -123,7 +125,7 @@ int main()
                     if (e.text.unicode == 'g')
                         snake.grow();
                     if (e.text.unicode == 'f')
-                        food = Food(windowWidth, windowHeight, size, sf::Color::White);
+                        food = Food(windowWidth, windowHeight, size, foodColor);
                     if (e.text.unicode == ' ') {
                         spaceBarPressed();
                     }
@@ -155,7 +157,7 @@ int main()
             window.close();
         }
 
-        window.clear();
+        window.clear(backgroundColor); // darkslategray
 
         // Game loop
         if (state == Playing) {
@@ -171,7 +173,7 @@ int main()
         }
 
         // Drawing objects on the screen
-		sf::RectangleShape previous;
+        sf::RectangleShape previous;
         for (sf::RectangleShape& piece : snake.getBody()) {
         	// Prevents pieces of the snake that are in the same position be drawn
         	// Helps in performance of really big snakes
