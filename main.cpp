@@ -105,10 +105,14 @@ int main()
     sf::Text gameOverText("Game Over. Press [SPACE] to restart", font, 30);
     gameOverText.setFillColor(sf::Color::Red);
 
+	unsigned int previousPoints = points;
     while (window.isOpen())
     {
         // Shows the current amount of points in the title bar
-        window.setTitle("Snake. Points: " + std::to_string(points));
+        if (previousPoints != points) {
+        	window.setTitle("Snake. Points: " + std::to_string(points));
+        	previousPoints = points;
+        }
 
         sf::Event e;
 
@@ -138,14 +142,14 @@ int main()
                 nextMove = Snake::Up;
         }
 
-        if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Left)) {
-            if (lastMove != Snake::Right)
-                nextMove = Snake::Left;
-        }
-
         if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Down)) {
             if (lastMove != Snake::Up)
                 nextMove = Snake::Down;
+        }
+
+        if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Left)) {
+            if (lastMove != Snake::Right)
+                nextMove = Snake::Left;
         }
 
         if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Right)) {
