@@ -4,6 +4,8 @@
 #include <SFML/Graphics.hpp>
 #include "Snake.h"
 #include "Food.h"
+#include <config4cpp/Configuration.h>
+using namespace config4cpp;
 
 /* ========== Variables used in the program ========== */
 // Window configuration
@@ -13,14 +15,15 @@ int windowHeight = 720;
 
 // Snake configuration
 float speed = 10.f;
-float size  = 10.f;
+float size  = 9.f;
 int growth  = 20;
 float startingX = 100.f;
 float startingY = 100.f;
-sf::Color color = sf::Color::Green;
-sf::Color foodColor = sf::Color::White;
+sf::Color snakeColor = sf::Color::Green;
+sf::Color foodColor  = sf::Color::White;
+sf::Color backgroundColor = sf::Color(40,40,40);
 
-Snake snake(windowWidth, windowHeight, size, speed, growth, color, startingX, startingY);
+Snake snake(windowWidth, windowHeight, size, speed, growth, snakeColor, startingX, startingY);
 Food food(windowWidth, windowHeight, size, foodColor);
 Snake::Direction nextMove = Snake::Right;
 Snake::Direction lastMove = Snake::Right;
@@ -43,7 +46,7 @@ void restart()
     points = 0;
     lastMove = Snake::Right;
     nextMove = Snake::Right;
-    snake = Snake(windowWidth, windowHeight, size, speed, growth, color, startingX, startingY);
+    snake = Snake(windowWidth, windowHeight, size, speed, growth, snakeColor, startingX, startingY);
     food  = Food(windowWidth, windowHeight, size, foodColor);
 }
 
@@ -78,16 +81,67 @@ void spaceBarPressed()
     }
 }
 
+bool configure()
+{
+    // TODO: treat exceptions
+
+    Configuration* cfg = Configuration::create();
+    const char *   configFile = "config.cfg";
+    const char *   scope = "";
+
+    try {
+        cfg->parse(configFile);
+        fps          = cfg->lookupInt(scope, "fps");
+        windowWidth  = cfg->lookupInt(scope, "windowWidth");
+        windowHeight = cfg->lookupInt(scope, "windowHeight");
+        speed        = cfg->lookupFloat(scope, "speed");
+        size         = cfg->lookupFloat(scope, "size");
+        growth       = cfg->lookupInt(scope, "growth");
+        startingX    = cfg->lookupInt(scope, "startingX");
+        startingY    = cfg->lookupInt(scope, "startingY");
+
+        std::string color;
+        color = cfg->lookupString(scope, "snakeColor");
+        std::string red   = color.substr(0, color.find("R"));
+        std::string green = color.substr(color.find("R")+1, color.find("G"));
+        std::string blue  = color.substr(color.find("G")+1, color.find("B"));
+        snakeColor = sf::Color(atoi(red.c_str()), atoi(green.c_str()), atoi(blue.c_str()));
+        
+        color = cfg->lookupString(scope, "foodColor");
+        red   = color.substr(0, color.find("R"));
+        green = color.substr(color.find("R")+1, color.find("G"));
+        blue  = color.substr(color.find("G")+1, color.find("B"));
+        foodColor = sf::Color(atoi(red.c_str()), atoi(green.c_str()), atoi(blue.c_str()));
+
+        color = cfg->lookupString(scope, "backgroundColor");
+        red   = color.substr(0, color.find("R"));
+        green = color.substr(color.find("R")+1, color.find("G"));
+        blue  = color.substr(color.find("G")+1, color.find("B"));
+        backgroundColor = sf::Color(atoi(red.c_str()), atoi(green.c_str()), atoi(blue.c_str()));
+
+    } catch(const ConfigurationException & ex) {
+        std::cerr << ex.c_str() << std::endl;
+        std::cout << "Error with configuration file. Using default settings" << std::endl;
+    } catch (const std::exception ex2) {
+        std::cerr << ex2.what() << std::endl;
+    }
+
+    cfg->destroy();
+}
 
 int main()
 {
+    // Configuring the game and its elements
+    // Configuration can be found in config.cfg
+    configure();
+    restart();
+
     /* ========== Configuring UI elements ========== */
 
     // Configuring the window
     sf::Uint32 style = sf::Style::Titlebar | sf::Style::Close | sf::Style::Resize;
     sf::RenderWindow window(sf::VideoMode(windowWidth, windowHeight), "Snake", style);
     window.setFramerateLimit(fps);
-    sf::Color backgroundColor = sf::Color(40,40,40);
 
     // Setting different texts showed on the screen
     sf::Font font;
