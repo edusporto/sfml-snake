@@ -99,9 +99,10 @@ bool Snake::intersects(const sf::RectangleShape& square)
 bool Snake::intersectsWithItself()
 {
     // starts at 2 so the head wont collide with the first body part
-    for (int i=3; i<body.size(); i++) {
-        if (intersects(body[i]))
+    for (int i=1; i<body.size(); i++) {
+        if (intersects(body[i])) { 
             return true;
+        }
     }
     return false;
 }
