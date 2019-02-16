@@ -102,31 +102,34 @@ bool configure()
 
         std::string color;
         color = cfg->lookupString(scope, "snakeColor");
-        std::string red   = color.substr(0, color.find("R"));
-        std::string green = color.substr(color.find("R")+1, color.find("G"));
-        std::string blue  = color.substr(color.find("G")+1, color.find("B"));
+        std::string red   = color.substr(0, color.find("r"));
+        std::string green = color.substr(color.find("r")+1, color.find("g"));
+        std::string blue  = color.substr(color.find("g")+1, color.find("b"));
         snakeColor = sf::Color(atoi(red.c_str()), atoi(green.c_str()), atoi(blue.c_str()));
         
         color = cfg->lookupString(scope, "foodColor");
-        red   = color.substr(0, color.find("R"));
-        green = color.substr(color.find("R")+1, color.find("G"));
-        blue  = color.substr(color.find("G")+1, color.find("B"));
+        red   = color.substr(0, color.find("r"));
+        green = color.substr(color.find("r")+1, color.find("g"));
+        blue  = color.substr(color.find("g")+1, color.find("b"));
         foodColor = sf::Color(atoi(red.c_str()), atoi(green.c_str()), atoi(blue.c_str()));
 
         color = cfg->lookupString(scope, "backgroundColor");
-        red   = color.substr(0, color.find("R"));
-        green = color.substr(color.find("R")+1, color.find("G"));
-        blue  = color.substr(color.find("G")+1, color.find("B"));
+        red   = color.substr(0, color.find("r"));
+        green = color.substr(color.find("r")+1, color.find("g"));
+        blue  = color.substr(color.find("g")+1, color.find("b"));
         backgroundColor = sf::Color(atoi(red.c_str()), atoi(green.c_str()), atoi(blue.c_str()));
 
     } catch(const ConfigurationException & ex) {
         std::cerr << ex.c_str() << std::endl;
         std::cout << "Error with configuration file. Using default settings" << std::endl;
+        return false;
     } catch (const std::exception ex2) {
         std::cerr << ex2.what() << std::endl;
+        return true;
     }
 
     cfg->destroy();
+    return true;
 }
 
 int main()
