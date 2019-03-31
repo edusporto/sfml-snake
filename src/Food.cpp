@@ -4,7 +4,7 @@
 
 Food::Food(int windowWidth, int windowHeight, float size, sf::Color color)
 {
-    srand(time(NULL));
+    //srand(time(NULL));
     const float startingX = rand() % (int)(windowWidth - size);
     const float startingY = rand() % (int)(windowHeight - size);
 
